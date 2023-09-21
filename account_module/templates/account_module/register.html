@@ -1,0 +1,34 @@
+{% extends 'shired/_loyout.html' %}
+{% block title %}
+ثبت نام
+{% endblock %}
+
+{% block content %}
+<div class="container">
+		<section id="form"><!--form-->
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						<h2>ثبت نام کاربـر جدیـد</h2>
+						<form action="{% url 'register-page' %}" method="post">
+                            {% csrf_token %}
+                            {{ register_forms.email.label_tag }}
+                            {{ register_forms.email }}
+                            {{ register_forms.email.errors }}
+
+                            {{ register_forms.password.label_tag }}
+                            {{ register_forms.password }}
+                            {{ register_forms.password.errors }}
+
+                            {{ register_forms.repeat_password.label_tag }}
+                            {{ register_forms.repeat_password }}
+                            {{ register_forms.repeat_password.errors }}
+
+							<button type="submit" class="btn btn-default">ثبت نام</button>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</section>
+	</div>
+{% endblock %}

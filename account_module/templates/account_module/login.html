@@ -1,0 +1,28 @@
+{% extends 'shired/_loyout.html' %}
+{% block title %} ورود {% endblock %}
+
+{% block content %}
+<div class="container">
+		<section id="form"><!--form-->
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						<h2>ورود کاربران </h2>
+						<form action="{% url 'login-page' %}" method="post">
+                            {% csrf_token %}
+                            {{ login_forms.email.label_tag }}
+                            {{ login_forms.email }}
+                            {{ login_forms.email.errors }}
+
+                            {{ login_forms.password.label_tag }}
+                            {{ login_forms.password }}
+                            {{ login_forms.password.errors }}
+
+							<button type="submit" class="btn btn-default">ورود</button>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</section>
+	</div>
+{% endblock %}

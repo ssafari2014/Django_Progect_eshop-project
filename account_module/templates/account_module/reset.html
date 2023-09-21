@@ -1,0 +1,26 @@
+{% extends 'shired/_loyout.html' %}
+{% block title %}تغیر رمز عبور{% endblock %}
+
+{% block content %}
+<div class="container">
+		<section id="form"><!--form-->
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						<h2>تغیر رمز عبور</h2>
+						<form action="{% url 'reset-page' email_active_code=user.email_active_code %}" method="post">
+                            {% csrf_token %}
+                            {{ forgot_forms..label_tag }}
+                            {{ forgot_forms.email }}
+                            {{ forgot_forms.email.errors }}
+                            {{ forgot_forms.email.label_tag }}
+                            {{ forgot_forms.email }}
+                            {{ forgot_forms.email.errors }}
+							<button type="submit" class="btn btn-default">ارسال</button>
+						</form>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</section>
+	</div>
+{% endblock %}

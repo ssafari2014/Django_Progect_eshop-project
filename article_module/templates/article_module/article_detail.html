@@ -1,0 +1,146 @@
+{% extends 'shired/_loyout.html' %}
+{% load render_partial %}
+{% load thumbnail %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+{% block title %}
+    جزئیات مقاله
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">{{ article.title }}</h2>
+                        <div class="single-blog-post">
+                            <h3>{{ article.title }}</h3>
+                            <div class="post-meta">
+                                <ul>
+                                    {% if article.auther %}
+                                        <li><i class="fa fa-user"></i>{{ article.auther }}</li>
+                                    {% endif %}
+                                    <li><i class="fa fa-clock-o"></i> {{ article.get_jalali_create_time }}</li>
+                                    <li><i class="fa fa-calendar"></i>{{ article.create_date | get_jalali_create_date }}
+                                    </li>
+                                </ul>
+                                <span>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+								</span>
+                            </div>
+                            <a href="">
+                                {#								<img src="/static/images/blog/blog-one.jpg" alt="">#}
+                                {% thumbnail article.img "862x398" crop='center' quality=90 as im %}
+                                    <img src="{{ im.url }}" alt="">
+                                {% endthumbnail %}
+                            </a>
+                            <p>{{ article.short_description }}</p>
+                            <p>{{ article.text }}</p>
+                        </div>
+                    </div><!--/blog-post-area-->
+                    <div class="socials-share">
+                        <a href=""><img src="/static/images/blog/socials.png" alt=""></a>
+                    </div><!--/socials-share-->
+                    {% if article.auther %}
+                        <div class="media commnets">
+                        <a class="pull-right" href="#">
+                            {% if article.auther.avatar %}
+                                {% thumbnail article.auther.avatar "121x86" crop='center' quality=90 as im %}
+                                    <img class="media-object" src="{{ im.url }}" alt="pic">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img class="media-object" src="/static/images/blog/Customer.jpg" alt="">
+                            {% endif %}
+                            {#							    <img class="media-object" src="{{ article.auther.avatar }}" alt="">#}
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{ article.auther }}</h4>
+                            <p>
+                                {{ article.auther.about_auther }}
+                            </p>
+                        </div>
+                    {% endif %}
+                    </div><!--Comments-->
+                    <div class="response-area">
+                        <h2>نظرات:
+                            {{ comment.count }}
+                        </h2>
+                        <ul class="media-list">
+                            {% for texts in comment %}
+                                <li class="media">
+                                    <a class="pull-right" href="#">
+                                        <img class="media-object" src="/static/images/blog/Customer.jpg" alt="">
+                                    </a>
+                                    <div class="media-body">
+                                        <ul class="sinlge-post-meta">
+                                            <li><i class="fa fa-user"></i>{{ texts.user }}</li>
+                                            <li><i class="fa fa-clock-o"></i>{{ texts.create_date | time }}</li>
+                                            <li>
+                                                <i class="fa fa-calendar"></i> {{ texts.create_date | get_jalali_create_date }}
+                                            </li>
+                                        </ul>
+                                        <p>{{ texts.text }}</p>
+                                        <a class="btn btn-primary" onclick="fill_parent_Td({{ texts.id }})"><i
+                                                class="fa fa-reply"></i>پاسـخ</a>
+                                    </div>
+                                </li>
+                                {% for sub_comment in texts.article_comments_set.all %}
+                                    <li class="media second-media">
+                                        <a class="pull-right" href="#">
+                                            <img class="media-object" src="/static/images/blog/Customer.jpg" alt="">
+                                        </a>
+                                        <div class="media-body">
+                                            <ul class="sinlge-post-meta">
+                                                <li><i class="fa fa-user"></i>{{ sub_comment.user }}</li>
+                                                <li><i class="fa fa-clock-o"></i>{{ sub_comment.create_date | time }}
+                                                </li>
+                                                <li>
+                                                    <i class="fa fa-calendar"></i> {{ sub_comment.create_date | get_jalali_create_date }}
+                                                </li>
+                                            </ul>
+                                            <p>{{ sub_comment.text }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div><!--/Response-area-->
+                    <div class="replay-box" id="comment-form">
+                        <div class="row">
+                            {% if request.user.is_authenticated %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h2>نظـر خود را بنویسیـد</h2>
+                                        <div class="text-area">
+                                            <input type="hidden" id="parent_id" value="">
+                                            <div class="blank-arrow">
+                                                <label>متن پیام</label>
+                                            </div>
+                                            <span>*</span>
+                                            <textarea name="message" rows="11" id="commentText"></textarea>
+                                            <a class="btn btn-primary" onclick="sendArticleComment({{ article.id }})">ارسـال
+                                                نظـر</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <a href="{% url 'login-page' %}">
+                                        برای ثبت نظر خود لاگین کنید
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% render_partial 'article_module.views.article_category_partial' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
